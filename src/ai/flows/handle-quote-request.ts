@@ -70,6 +70,22 @@ const handleQuoteRequestFlow = ai.defineFlow(
     outputSchema: HandleQuoteRequestOutputSchema,
   },
   async input => {
+    const webhookUrl = 'https://n8n.nereujr.com.br/webhook/51b16be5-e345-4623-ba91-33dc2bcc5c20';
+
+    try {
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(input),
+      });
+      console.log('Webhook sent successfully for:', input.name);
+    } catch (error) {
+      console.error('Failed to send webhook:', error);
+      // Decide if you want to throw an error or handle it silently
+    }
+    
     // In a real application, you would save this to a database,
     // send an email, or trigger a CRM workflow.
     console.log('Handling quote request:', input);
