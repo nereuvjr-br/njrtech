@@ -178,16 +178,23 @@ export function ChatWidget() {
         "fixed bottom-4 right-4 z-50 w-[calc(100vw-2rem)] max-w-md transition-all duration-300 ease-in-out",
         isOpen ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
       )}>
-        <Card className="flex h-[70vh] max-h-[600px] flex-col shadow-2xl">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div className="space-y-1">
-              <CardTitle>Vamos começar seu projeto?</CardTitle>
-              <CardDescription>
-                Responda algumas perguntas para criarmos seu orçamento.
-              </CardDescription>
+        <Card className="flex h-[70vh] max-h-[600px] flex-col shadow-2xl rounded-xl">
+           <CardHeader className="flex flex-row items-center justify-between p-4 border-b">
+            <div className="flex items-center gap-3">
+               <Avatar className="w-10 h-10 border-2 border-primary/50 bg-background">
+                <AvatarFallback className="bg-transparent text-primary">
+                  <Bot className="w-6 h-6" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="space-y-0">
+                <CardTitle className="text-base">Assistente NJR Tech</CardTitle>
+                <CardDescription className="text-xs">
+                  Vamos começar seu projeto?
+                </CardDescription>
+              </div>
             </div>
-            <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
-              <X className="h-5 w-5" />
+            <Button variant="ghost" size="icon" onClick={() => setOpen(false)} className="h-8 w-8">
+              <X className="h-4 w-4" />
               <span className="sr-only">Fechar</span>
             </Button>
           </CardHeader>
@@ -199,7 +206,7 @@ export function ChatWidget() {
                     <div
                     key={index}
                     className={cn(
-                        'flex items-start gap-3',
+                        'flex items-end gap-3',
                         message.role === 'user' ? 'justify-end' : 'justify-start'
                     )}
                     >
@@ -212,15 +219,15 @@ export function ChatWidget() {
                     )}
                     <div
                         className={cn(
-                        'max-w-xs rounded-lg p-3 text-sm sm:max-w-sm whitespace-pre-wrap',
+                        'max-w-xs rounded-2xl p-3 text-sm sm:max-w-sm whitespace-pre-wrap shadow-sm',
                         message.role === 'user'
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-muted'
+                            ? 'bg-primary text-primary-foreground rounded-br-none'
+                            : 'bg-muted rounded-bl-none'
                         )}
                     >
                         {message.content}
                          {isComplete && protocol && message.role === 'model' && message.content.includes(protocol) && (
-                            <div className="mt-4 flex items-center gap-2 rounded-md border border-primary/20 bg-primary/10 p-2">
+                            <div className="mt-3 flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/10 p-2">
                                 <span className="text-sm font-semibold text-primary-foreground/90 flex-1">{protocol}</span>
                                 <Button size="sm" variant="ghost" className="h-auto p-1 text-primary-foreground/90 hover:bg-primary/20" onClick={handleCopyProtocol}>
                                     {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
@@ -239,44 +246,48 @@ export function ChatWidget() {
                     </div>
                 ))}
                 {isSubmitting && !requiresConfirmation &&(
-                    <div className="flex items-start gap-3 justify-start">
+                    <div className="flex items-end gap-3 justify-start">
                         <Avatar className="w-8 h-8 border-2 border-primary/50 bg-background">
                             <AvatarFallback className="bg-transparent text-primary">
                                 <Bot className="w-5 h-5" />
                             </AvatarFallback>
                         </Avatar>
-                        <div className="ml-0 max-w-xs rounded-lg bg-muted p-3 text-sm sm:max-w-sm flex items-center">
-                            <Loader2 className="h-4 w-4 animate-spin" />
+                        <div className="max-w-xs rounded-2xl bg-muted rounded-bl-none p-3 text-sm sm:max-w-sm flex items-center shadow-sm">
+                            <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                            <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.15s] mx-1"></div>
+                            <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
                         </div>
                     </div>
                 )}
                 </div>
             </ScrollArea>
              {requiresConfirmation && !isSubmitting && (
-              <div className="border-t p-4 flex flex-col sm:flex-row gap-2">
+              <div className="border-t p-4 flex flex-col sm:flex-row gap-2 bg-background">
                 <Button className="w-full" onClick={() => handleConfirmation('sim')}>Sim, estão corretos</Button>
                 <Button className="w-full" variant="outline" onClick={() => handleConfirmation('não')}>Não, quero corrigir</Button>
               </div>
             )}
 
-
-            <form onSubmit={handleSubmit} className={cn("flex items-center gap-2 border-t p-4", { 'hidden': requiresConfirmation })}>
-              <Input
-                ref={inputRef}
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                placeholder={isComplete ? "Obrigado! Entraremos em contato." : "Digite sua mensagem..."}
-                disabled={isSubmitting || isComplete || requiresConfirmation}
-                autoComplete="off"
-              />
-              <Button type="submit" size="icon" disabled={isSubmitting || !userInput.trim() || isComplete}>
-                {isSubmitting ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Send className="h-4 w-4" />
-                )}
-              </Button>
-            </form>
+            <div className={cn("border-t p-2 bg-background", { 'hidden': requiresConfirmation })}>
+                <form onSubmit={handleSubmit} className="flex items-center gap-2">
+                <Input
+                    ref={inputRef}
+                    value={userInput}
+                    onChange={(e) => setUserInput(e.target.value)}
+                    placeholder={isComplete ? "Obrigado! Entraremos em contato." : "Digite sua mensagem..."}
+                    disabled={isSubmitting || isComplete || requiresConfirmation}
+                    autoComplete="off"
+                    className="flex-1 rounded-full border-input bg-background focus-visible:ring-1 focus-visible:ring-offset-0"
+                />
+                <Button type="submit" size="icon" className="rounded-full" disabled={isSubmitting || !userInput.trim() || isComplete}>
+                    {isSubmitting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                    <Send className="h-4 w-4" />
+                    )}
+                </Button>
+                </form>
+            </div>
           </CardContent>
         </Card>
       </div>
