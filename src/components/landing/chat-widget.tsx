@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Loader2, Send, Bot, X, MessageSquare } from 'lucide-react';
+import { Loader2, Send, Bot, X, MessageSquare, Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -32,12 +32,17 @@ export function ChatWidget() {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [briefingData, setBriefingData] = React.useState<{ name?: string }>({});
   const [isComplete, setIsComplete] = React.useState(false);
+  const [requiresConfirmation, setRequiresConfirmation] = React.useState(false);
+  const [protocol, setProtocol] = React.useState<string | null>(null);
+  const [isCopied, setIsCopied] = React.useState(false);
 
 
   const resetChat = React.useCallback(() => {
     setMessages([initialMessage]);
     setUserInput('');
     setIsComplete(false);
+    setRequiresConfirmation(false);
+    setProtocol(null);
   }, []);
 
   React.useEffect(() => {
@@ -47,7 +52,6 @@ export function ChatWidget() {
   }, [isOpen, resetChat, messages.length]);
 
   React.useEffect(() => {
-    // Use timeout to make sure the new message is rendered before scrolling
     setTimeout(() => {
       if (scrollAreaRef.current) {
         const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
@@ -62,13 +66,12 @@ export function ChatWidget() {
   }, [messages]);
 
   const focusInput = React.useCallback(() => {
-    // Add a small delay to ensure the input is enabled and rendered before focusing
     setTimeout(() => {
-      if (!isComplete) {
+      if (!isComplete && !requiresConfirmation) {
          inputRef.current?.focus();
       }
     }, 100);
-  }, [isComplete]);
+  }, [isComplete, requiresConfirmation]);
 
   React.useEffect(() => {
     if (isOpen) {
@@ -76,14 +79,14 @@ export function ChatWidget() {
     }
   }, [isOpen, focusInput]);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!userInput.trim() || isComplete) return;
+  const processChat = async (messageContent: string) => {
+    if (!messageContent.trim()) return;
 
-    const newMessages: Message[] = [...messages, { role: 'user', content: userInput }];
+    const newMessages: Message[] = [...messages, { role: 'user', content: messageContent }];
     setMessages(newMessages);
     setUserInput('');
     setIsSubmitting(true);
+    setRequiresConfirmation(false);
 
     try {
       const result: ChatOutput = await continueChat({ history: newMessages });
@@ -96,8 +99,11 @@ export function ChatWidget() {
         setBriefingData(prev => ({ ...prev, name: result.briefing?.name }));
       }
       
+      setRequiresConfirmation(result.requiresConfirmation || false);
+
       if (result.isComplete) {
          setIsComplete(true);
+         setProtocol(result.protocol || null);
          toast({
           title: 'Briefing Concluído! ✅',
           description: "Seu protocolo foi gerado. Entraremos em contato em breve!",
@@ -124,17 +130,35 @@ export function ChatWidget() {
     }
   }
 
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    processChat(userInput);
+  }
+
+  const handleConfirmation = (confirmation: 'sim' | 'não') => {
+    processChat(confirmation);
+  };
+  
+  const handleCopyProtocol = () => {
+    if (protocol) {
+      navigator.clipboard.writeText(protocol);
+      setIsCopied(true);
+      toast({
+        title: 'Protocolo copiado!',
+      });
+      setTimeout(() => setIsCopied(false), 2000); // Reset icon after 2s
+    }
+  };
+
   const getUserInitial = () => {
     if (briefingData.name) {
       return briefingData.name.charAt(0).toUpperCase();
     }
-    // Fallback to find the name from messages if briefing data is not yet set
     const nameMessage = messages.find(m => m.role === 'user' && m.content.length > 1);
     if (nameMessage) {
         const potentialName = nameMessage.content.split(' ')[0];
         if (potentialName.length > 0) return potentialName.charAt(0).toUpperCase();
     }
-
     return 'U';
   };
 
@@ -195,6 +219,15 @@ export function ChatWidget() {
                         )}
                     >
                         {message.content}
+                         {isComplete && protocol && message.role === 'model' && message.content.includes(protocol) && (
+                            <div className="mt-4 flex items-center gap-2 rounded-md border border-primary/20 bg-primary/10 p-2">
+                                <span className="text-sm font-semibold text-primary-foreground/90 flex-1">{protocol}</span>
+                                <Button size="sm" variant="ghost" className="h-auto p-1 text-primary-foreground/90 hover:bg-primary/20" onClick={handleCopyProtocol}>
+                                    {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                                    <span className="sr-only">Copiar Protocolo</span>
+                                </Button>
+                            </div>
+                        )}
                     </div>
                     {message.role === 'user' && (
                         <Avatar className="w-8 h-8">
@@ -205,7 +238,7 @@ export function ChatWidget() {
                     )}
                     </div>
                 ))}
-                {isSubmitting && (
+                {isSubmitting && !requiresConfirmation &&(
                     <div className="flex items-start gap-3 justify-start">
                         <Avatar className="w-8 h-8 border-2 border-primary/50 bg-background">
                             <AvatarFallback className="bg-transparent text-primary">
@@ -219,14 +252,21 @@ export function ChatWidget() {
                 )}
                 </div>
             </ScrollArea>
+             {requiresConfirmation && !isSubmitting && (
+              <div className="border-t p-4 flex flex-col sm:flex-row gap-2">
+                <Button className="w-full" onClick={() => handleConfirmation('sim')}>Sim, estão corretos</Button>
+                <Button className="w-full" variant="outline" onClick={() => handleConfirmation('não')}>Não, quero corrigir</Button>
+              </div>
+            )}
 
-            <form onSubmit={handleSubmit} className="flex items-center gap-2 border-t p-4">
+
+            <form onSubmit={handleSubmit} className={cn("flex items-center gap-2 border-t p-4", { 'hidden': requiresConfirmation })}>
               <Input
                 ref={inputRef}
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 placeholder={isComplete ? "Obrigado! Entraremos em contato." : "Digite sua mensagem..."}
-                disabled={isSubmitting || isComplete}
+                disabled={isSubmitting || isComplete || requiresConfirmation}
                 autoComplete="off"
               />
               <Button type="submit" size="icon" disabled={isSubmitting || !userInput.trim() || isComplete}>
