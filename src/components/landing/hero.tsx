@@ -6,14 +6,15 @@ import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { QuoteModal } from '@/components/landing/quote-modal';
+import { useChat } from '@/hooks/use-chat';
 
 export function Hero() {
   const heroImage = PlaceHolderImages.find((img) => img.id === 'hero-image');
-  const [isQuoteModalOpen, setIsQuoteModalOpen] = React.useState(false);
+  const { setOpen: setChatOpen } = useChat();
+  
+  const openChat = () => setChatOpen(true);
 
   return (
-    <>
     <section className="relative w-full overflow-hidden bg-background">
       <div className="container grid lg:grid-cols-2 items-center gap-12 px-4 py-24 md:py-32">
         <div className="flex flex-col items-center lg:items-start space-y-6 fade-in-up text-center lg:text-left">
@@ -24,7 +25,7 @@ export function Hero() {
             A NJR Tech cria páginas rápidas, otimizadas para Google e prontas para captar clientes, usando inteligência artificial.
           </p>
           <div className="flex flex-col gap-4 sm:flex-row">
-            <Button size="lg" onClick={() => setIsQuoteModalOpen(true)}>Quero uma Landing Page</Button>
+            <Button size="lg" onClick={openChat}>Quero uma Landing Page</Button>
             <Button asChild size="lg" variant="outline">
               <Link href="#why-us">Nossos Diferenciais</Link>
             </Button>
@@ -45,7 +46,5 @@ export function Hero() {
         </div>
       </div>
     </section>
-    <QuoteModal isOpen={isQuoteModalOpen} onOpenChange={setIsQuoteModalOpen} />
-    </>
   );
 }

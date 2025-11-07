@@ -6,6 +6,7 @@ import { HowItWorks } from '@/components/landing/how-it-works';
 import { Pricing } from '@/components/landing/pricing';
 import { Faq } from '@/components/landing/faq';
 import { Footer } from '@/components/landing/footer';
+import { ChatWidget } from '@/components/landing/chat-widget';
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
         <Faq />
       </main>
       <Footer />
+      <ChatWidget />
     </div>
   );
 }

@@ -1,0 +1,214 @@
+'use client';
+
+import * as React from 'react';
+import { Loader2, Send, Bot, X, MessageSquare } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
+import { continueChat, type ChatOutput } from '@/ai/flows/chat-briefing';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { useChat, ChatProvider } from '@/hooks/use-chat';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
+
+type Message = {
+  role: 'user' | 'model';
+  content: string;
+};
+
+const initialMessage: Message = {
+  role: 'model',
+  content: 'Olá! Sou o Nexus, assistente da NJR Tech. Para começarmos, qual é o seu nome?',
+};
+
+function ChatWidgetComponent() {
+  const { toast } = useToast();
+  const { isOpen, setOpen } = useChat();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [messages, setMessages] = React.useState<Message[]>([]);
+  const [userInput, setUserInput] = React.useState('');
+  const scrollAreaRef = React.useRef<HTMLDivElement>(null);
+
+  const resetChat = React.useCallback(() => {
+    setMessages([initialMessage]);
+    setUserInput('');
+  }, []);
+
+  React.useEffect(() => {
+    if (isOpen && messages.length === 0) {
+      resetChat();
+    }
+  }, [isOpen, resetChat, messages.length]);
+
+  React.useEffect(() => {
+    // Use timeout to make sure the new message is rendered before scrolling
+    setTimeout(() => {
+      if (scrollAreaRef.current) {
+        scrollAreaRef.current.scrollTo({
+          top: scrollAreaRef.current.scrollHeight,
+          behavior: 'smooth',
+        });
+      }
+    }, 100);
+  }, [messages]);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!userInput.trim()) return;
+
+    const newMessages: Message[] = [...messages, { role: 'user', content: userInput }];
+    setMessages(newMessages);
+    setUserInput('');
+    setIsSubmitting(true);
+
+    try {
+      const result: ChatOutput = await continueChat({ history: newMessages });
+
+      if (result.response) {
+        setMessages([...newMessages, { role: 'model', content: result.response }]);
+      }
+      
+      if (result.isComplete) {
+         toast({
+          title: 'Briefing Concluído! ✅',
+          description: "Recebemos suas informações. Entraremos em contato em breve!",
+        });
+        setTimeout(() => {
+            setOpen(false);
+            // Optionally clear chat after completion and closing
+            setTimeout(() => setMessages([]), 500); 
+        }, 4000);
+      }
+
+    } catch (error) {
+      console.error('Error submitting chat:', error);
+      setMessages([
+        ...newMessages,
+        {
+          role: 'model',
+          content: 'Desculpe, algo deu errado por aqui. Poderia tentar novamente? 😕',
+        },
+      ]);
+      toast({
+        variant: 'destructive',
+        title: 'Ops! Algo deu errado.',
+        description: 'Não foi possível continuar o chat. Tente novamente mais tarde.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  return (
+    <>
+      <div className={cn(
+        "fixed bottom-4 right-4 z-50 transition-transform duration-300 ease-in-out",
+        isOpen ? "translate-y-[200%]" : "translate-y-0"
+      )}>
+        <Button size="lg" className="rounded-full shadow-lg h-16 w-16" onClick={() => setOpen(true)}>
+          <MessageSquare className="h-8 w-8" />
+          <span className="sr-only">Abrir Chat</span>
+        </Button>
+      </div>
+
+      <div className={cn(
+        "fixed bottom-4 right-4 z-50 w-[calc(100vw-2rem)] max-w-md transition-all duration-300 ease-in-out",
+        isOpen ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
+      )}>
+        <Card className="flex h-[70vh] max-h-[600px] flex-col shadow-2xl">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div className="space-y-1">
+              <CardTitle>Vamos começar seu projeto?</CardTitle>
+              <CardDescription>
+                Responda algumas perguntas para criarmos seu orçamento.
+              </CardDescription>
+            </div>
+            <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
+              <X className="h-5 w-5" />
+              <span className="sr-only">Fechar</span>
+            </Button>
+          </CardHeader>
+          
+          <CardContent className="flex-1 flex flex-col overflow-hidden p-0">
+            <ScrollArea className="flex-1" ref={scrollAreaRef}>
+                <div className="flex flex-col gap-4 p-4">
+                {messages.map((message, index) => (
+                    <div
+                    key={index}
+                    className={cn(
+                        'flex items-start gap-3',
+                        message.role === 'user' ? 'justify-end' : 'justify-start'
+                    )}
+                    >
+                    {message.role === 'model' && (
+                        <Avatar className="w-8 h-8 border-2 border-primary/50 bg-background">
+                            <AvatarFallback className="bg-transparent text-primary">
+                                <Bot className="w-5 h-5" />
+                            </AvatarFallback>
+                        </Avatar>
+                    )}
+                    <div
+                        className={cn(
+                        'max-w-xs rounded-lg p-3 text-sm sm:max-w-sm whitespace-pre-wrap',
+                        message.role === 'user'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted'
+                        )}
+                    >
+                        {message.content}
+                    </div>
+                    {message.role === 'user' && (
+                        <Avatar className="w-8 h-8">
+                            <AvatarFallback>
+                                {messages.find(m => m.role === 'user' && m.content.length > 0)?.content.charAt(0).toUpperCase() || 'U'}
+                            </AvatarFallback>
+                        </Avatar>
+                    )}
+                    </div>
+                ))}
+                {isSubmitting && (
+                    <div className="flex items-start gap-3 justify-start">
+                        <Avatar className="w-8 h-8 border-2 border-primary/50 bg-background">
+                            <AvatarFallback className="bg-transparent text-primary">
+                                <Bot className="w-5 h-5" />
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="ml-0 max-w-xs rounded-lg bg-muted p-3 text-sm sm:max-w-sm flex items-center">
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        </div>
+                    </div>
+                )}
+                </div>
+            </ScrollArea>
+
+            <form onSubmit={handleSubmit} className="flex items-center gap-2 border-t p-4">
+              <Input
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                placeholder="Digite sua mensagem..."
+                disabled={isSubmitting}
+                autoComplete="off"
+              />
+              <Button type="submit" size="icon" disabled={isSubmitting || !userInput.trim()}>
+                {isSubmitting ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </>
+  );
+}
+
+export function ChatWidget() {
+    return (
+        <ChatProvider>
+            <ChatWidgetComponent />
+        </ChatProvider>
+    )
+}
