@@ -55,10 +55,10 @@ const prompt = ai.definePrompt({
   Project Description: {{{projectDescription}}}
 
   Analyze the project description and generate a friendly confirmation message acknowledging the receipt of their request.
-  Also, provide a brief suggestion for the next step, which is usually for our team to get in touch within 24 hours.
+  This message is NOT for the chat, but for internal purposes or a future email. It should be very simple.
   
-  Example Confirmation: "Obrigado, {{{name}}}! Recebemos sua solicitação e nossa equipe entrará em contato em breve."
-  Example Suggestion: "Enquanto isso, que tal dar uma olhada em nosso processo de trabalho na seção 'Como Funciona'?"
+  Example Confirmation: "Solicitação de {{{name}}} recebida."
+  Example Suggestion: "Follow-up via email."
   
   Return the response in the specified JSON format.`,
 });
@@ -70,26 +70,34 @@ const handleQuoteRequestFlow = ai.defineFlow(
     outputSchema: HandleQuoteRequestOutputSchema,
   },
   async input => {
+    // Validate input with Zod. This will throw an error if the data is invalid.
+    HandleQuoteRequestInputSchema.parse(input);
+    
     const webhookUrl = 'https://n8n.nereujr.com.br/webhook/51b16be5-e345-4623-ba91-33dc2bcc5c20';
 
     try {
-      await fetch(webhookUrl, {
+      const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(input),
       });
+      
+      if (!response.ok) {
+        console.error('Webhook response not OK:', { status: response.status, statusText: response.statusText });
+        const responseBody = await response.text();
+        console.error('Webhook response body:', responseBody);
+        throw new Error(`Webhook failed with status ${response.status}`);
+      }
+
       console.log('Webhook sent successfully for:', input.name);
     } catch (error) {
       console.error('Failed to send webhook:', error);
-      // Decide if you want to throw an error or handle it silently
+      // Re-throw the error to let the calling flow know something went wrong.
+      throw error;
     }
     
-    // In a real application, you would save this to a database,
-    // send an email, or trigger a CRM workflow.
-    console.log('Handling quote request:', input);
-
     const {output} = await prompt(input);
     return output!;
   }
