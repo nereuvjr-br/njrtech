@@ -9,7 +9,7 @@ import { continueChat, type ChatOutput } from '@/ai/flows/chat-briefing';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useChat, ChatProvider } from '@/hooks/use-chat';
+import { useChat } from '@/hooks/use-chat';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 
 type Message = {
@@ -22,7 +22,7 @@ const initialMessage: Message = {
   content: 'Olá! Sou o Nexus, assistente da NJR Tech. Para começarmos, qual é o seu nome?',
 };
 
-function ChatWidgetComponent() {
+export function ChatWidget() {
   const { toast } = useToast();
   const { isOpen, setOpen } = useChat();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -203,12 +203,4 @@ function ChatWidgetComponent() {
       </div>
     </>
   );
-}
-
-export function ChatWidget() {
-    return (
-        <ChatProvider>
-            <ChatWidgetComponent />
-        </ChatProvider>
-    )
 }
