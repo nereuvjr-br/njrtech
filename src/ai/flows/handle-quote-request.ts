@@ -41,28 +41,6 @@ export async function handleQuoteRequest(
   return handleQuoteRequestFlow(input);
 }
 
-const prompt = ai.definePrompt({
-  name: 'handleQuoteRequestPrompt',
-  input: {schema: HandleQuoteRequestInputSchema},
-  output: {schema: HandleQuoteRequestOutputSchema},
-  prompt: `You are a friendly and professional business assistant for NJR Tech.
-  A potential client has just submitted a quote request.
-  Their details are:
-  Name: {{{name}}}
-  Email: {{{email}}}
-  WhatsApp: {{{whatsapp}}}
-  Company: {{{company}}}
-  Project Description: {{{projectDescription}}}
-
-  Analyze the project description and generate a friendly confirmation message acknowledging the receipt of their request.
-  This message is NOT for the chat, but for internal purposes or a future email. It should be very simple.
-  
-  Example Confirmation: "Solicitação de {{{name}}} recebida."
-  Example Suggestion: "Follow-up via email."
-  
-  Return the response in the specified JSON format.`,
-});
-
 const handleQuoteRequestFlow = ai.defineFlow(
   {
     name: 'handleQuoteRequestFlow',
@@ -101,7 +79,10 @@ const handleQuoteRequestFlow = ai.defineFlow(
       throw error;
     }
     
-    const {output} = await prompt(input);
-    return output!;
+    // Return a static confirmation after webhook success.
+    return {
+      confirmationMessage: `Request for ${input.name} received and sent to webhook.`,
+      followUpSuggestion: 'Follow-up via email.',
+    };
   }
 );
