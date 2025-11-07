@@ -1,3 +1,52 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-image",
+      "description": "Mockup de um site em um laptop",
+      "imageUrl": "https://images.unsplash.com/photo-1730794545099-14902983739d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3ZWJzaXRlJTIwbW9ja3VwJTIwbGFwdG9wfGVufDB8fHx8MTc2MjQ4MDMxNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "website mockup laptop"
+    },
+    {
+      "id": "example-course",
+      "description": "Exemplo de landing page para curso online",
+      "imageUrl": "https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxvbmxpbmUlMjBjb3Vyc2V8ZW58MHx8fHwxNzYyNDM0NTM4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "online course"
+    },
+    {
+      "id": "example-law",
+      "description": "Exemplo de site para escritório de advocacia",
+      "imageUrl": "https://images.unsplash.com/photo-1589994965851-a8f479c573a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxsYXclMjBmaXJtJTIwd2Vic2l0ZXxlbnwwfHx8fDE3NjI0ODAzMTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "law firm website"
+    },
+    {
+      "id": "example-clinic",
+      "description": "Exemplo de site para clínica médica",
+      "imageUrl": "https://images.unsplash.com/photo-1698795635695-29fd61f60edd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtZWRpY2FsJTIwY2xpbmljJTIwd2Vic2l0ZXxlbnwwfHx8fDE3NjI0ODAzMTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "medical clinic website"
+    },
+    {
+      "id": "example-event",
+      "description": "Exemplo de página para evento",
+      "imageUrl": "https://images.unsplash.com/photo-1684607632523-b3a05813a40c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxldmVudCUyMHByb21vdGlvbiUyMHBhZ2V8ZW58MHx8fHwxNzYyNDgwMzE1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "event promotion page"
+    },
+    {
+      "id": "avatar-1",
+      "description": "Foto de cliente satisfeito 1",
+      "imageUrl": "https://images.unsplash.com/photo-1689997665293-c798b812a244?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwb3J0cmFpdCUyMHBlcnNvbnxlbnwwfHx8fDE3NjI0MzAxNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "portrait person"
+    },
+    {
+      "id": "avatar-2",
+      "description": "Foto de cliente satisfeito 2",
+      "imageUrl": "https://images.unsplash.com/photo-1629425733761-caae3b5f2e50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwcm9mZXNzaW9uYWwlMjBoZWFkc2hvdHxlbnwwfHx8fDE3NjIzOTg4MTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "professional headshot"
+    },
+    {
+      "id": "avatar-3",
+      "description": "Foto de cliente satisfeito 3",
+      "imageUrl": "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzbWlsaW5nJTIwcGVyc29ufGVufDB8fHx8MTc2MjQwMDkzMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "smiling person"
+    }
+  ]
 }
