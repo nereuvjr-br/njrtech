@@ -87,8 +87,8 @@ const chatBriefingFlow = ai.defineFlow(
     if (output.isComplete && output.briefing) {
       const { name, email, whatsapp, company, projectDescription } = output.briefing;
       if (name && email && projectDescription && whatsapp) {
-        // We don't need to wait for this to complete to give the user a response.
-        handleQuoteRequest({
+        // Now we wait for the webhook to be called before returning.
+        await handleQuoteRequest({
           name,
           email,
           whatsapp,
