@@ -31,11 +31,13 @@ export function ChatWidget() {
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [briefingData, setBriefingData] = React.useState<{ name?: string }>({});
+  const [isComplete, setIsComplete] = React.useState(false);
 
 
   const resetChat = React.useCallback(() => {
     setMessages([initialMessage]);
     setUserInput('');
+    setIsComplete(false);
   }, []);
 
   React.useEffect(() => {
@@ -48,10 +50,13 @@ export function ChatWidget() {
     // Use timeout to make sure the new message is rendered before scrolling
     setTimeout(() => {
       if (scrollAreaRef.current) {
-        scrollAreaRef.current.scrollTo({
-          top: scrollAreaRef.current.scrollHeight,
-          behavior: 'smooth',
-        });
+        const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
+        if (viewport) {
+           viewport.scrollTo({
+            top: viewport.scrollHeight,
+            behavior: 'smooth',
+          });
+        }
       }
     }, 100);
   }, [messages]);
@@ -59,9 +64,11 @@ export function ChatWidget() {
   const focusInput = React.useCallback(() => {
     // Add a small delay to ensure the input is enabled and rendered before focusing
     setTimeout(() => {
-      inputRef.current?.focus();
-    }, 50);
-  }, []);
+      if (!isComplete) {
+         inputRef.current?.focus();
+      }
+    }, 100);
+  }, [isComplete]);
 
   React.useEffect(() => {
     if (isOpen) {
@@ -71,7 +78,7 @@ export function ChatWidget() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!userInput.trim()) return;
+    if (!userInput.trim() || isComplete) return;
 
     const newMessages: Message[] = [...messages, { role: 'user', content: userInput }];
     setMessages(newMessages);
@@ -90,15 +97,11 @@ export function ChatWidget() {
       }
       
       if (result.isComplete) {
+         setIsComplete(true);
          toast({
           title: 'Briefing Concluído! ✅',
-          description: "Recebemos suas informações. Entraremos em contato em breve!",
+          description: "Seu protocolo foi gerado. Entraremos em contato em breve!",
         });
-        setTimeout(() => {
-            setOpen(false);
-            // Optionally clear chat after completion and closing
-            setTimeout(() => setMessages([]), 500); 
-        }, 4000);
       }
 
     } catch (error) {
@@ -125,8 +128,14 @@ export function ChatWidget() {
     if (briefingData.name) {
       return briefingData.name.charAt(0).toUpperCase();
     }
-    const firstUserMessage = messages.find(m => m.role === 'user' && m.content.length > 0);
-    return firstUserMessage ? firstUserMessage.content.charAt(0).toUpperCase() : 'U';
+    // Fallback to find the name from messages if briefing data is not yet set
+    const nameMessage = messages.find(m => m.role === 'user' && m.content.length > 1);
+    if (nameMessage) {
+        const potentialName = nameMessage.content.split(' ')[0];
+        if (potentialName.length > 0) return potentialName.charAt(0).toUpperCase();
+    }
+
+    return 'U';
   };
 
   return (
@@ -216,11 +225,11 @@ export function ChatWidget() {
                 ref={inputRef}
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
-                placeholder="Digite sua mensagem..."
-                disabled={isSubmitting}
+                placeholder={isComplete ? "Obrigado! Entraremos em contato." : "Digite sua mensagem..."}
+                disabled={isSubmitting || isComplete}
                 autoComplete="off"
               />
-              <Button type="submit" size="icon" disabled={isSubmitting || !userInput.trim()}>
+              <Button type="submit" size="icon" disabled={isSubmitting || !userInput.trim() || isComplete}>
                 {isSubmitting ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (

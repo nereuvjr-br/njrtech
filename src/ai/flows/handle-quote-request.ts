@@ -18,6 +18,7 @@ const HandleQuoteRequestInputSchema = z.object({
   projectDescription: z
     .string()
     .describe('A brief description of the project or the desired service.'),
+  protocol: z.string().optional().describe('A unique protocol number for the request.'),
 });
 export type HandleQuoteRequestInput = z.infer<
   typeof HandleQuoteRequestInputSchema

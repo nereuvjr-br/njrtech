@@ -16,15 +16,17 @@ export default function TestWebhookPage() {
     setResult(null);
     setError(null);
     try {
+      const protocol = `TEST-${Date.now()}`;
       const mockData = {
         name: 'Test User',
         email: 'test@example.com',
         whatsapp: '1234567890',
         company: 'Test Inc.',
         projectDescription: 'This is a test project from the test page.',
+        protocol: protocol,
       };
       const response = await handleQuoteRequest(mockData);
-      setResult(`Webhook sent successfully! AI Response: ${response.confirmationMessage}`);
+      setResult(`Webhook sent successfully! Protocol: ${protocol}. AI Response: ${response.confirmationMessage}`);
     } catch (e: any) {
       console.error('Error sending webhook:', e);
       setError(e.message || 'An unknown error occurred.');
