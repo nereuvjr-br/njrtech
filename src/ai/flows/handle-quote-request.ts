@@ -13,6 +13,7 @@ import {z} from 'genkit';
 const HandleQuoteRequestInputSchema = z.object({
   name: z.string().describe('The name of the person requesting the quote.'),
   email: z.string().email().describe('The email of the person.'),
+  whatsapp: z.string().optional().describe('The WhatsApp number of the person.'),
   company: z.string().optional().describe('The company name.'),
   projectDescription: z
     .string()
@@ -49,6 +50,7 @@ const prompt = ai.definePrompt({
   Their details are:
   Name: {{{name}}}
   Email: {{{email}}}
+  WhatsApp: {{{whatsapp}}}
   Company: {{{company}}}
   Project Description: {{{projectDescription}}}
 
@@ -68,6 +70,10 @@ const handleQuoteRequestFlow = ai.defineFlow(
     outputSchema: HandleQuoteRequestOutputSchema,
   },
   async input => {
+    // In a real application, you would save this to a database,
+    // send an email, or trigger a CRM workflow.
+    console.log('Handling quote request:', input);
+
     const {output} = await prompt(input);
     return output!;
   }

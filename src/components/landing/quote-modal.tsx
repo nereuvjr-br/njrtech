@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Loader2, Send } from 'lucide-react';
+import { Loader2, Send, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -15,7 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { continueChat } from '@/ai/flows/chat-briefing';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { NjrTechLogo } from '@/components/icons';
 
 interface QuoteModalProps {
@@ -30,7 +30,7 @@ type Message = {
 
 const initialMessage: Message = {
   role: 'model',
-  content: 'Olá! Sou o assistente da NJR Tech. Para começarmos, qual é o seu nome?',
+  content: 'Olá! Sou o Nexus, assistente da NJR Tech. Para começarmos, qual é o seu nome?',
 };
 
 export function QuoteModal({ isOpen, onOpenChange }: QuoteModalProps) {
@@ -49,12 +49,15 @@ export function QuoteModal({ isOpen, onOpenChange }: QuoteModalProps) {
   };
   
   React.useEffect(() => {
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTo({
-        top: scrollAreaRef.current.scrollHeight,
-        behavior: 'smooth',
-      });
-    }
+    // Use timeout to make sure the new message is rendered before scrolling
+    setTimeout(() => {
+      if (scrollAreaRef.current) {
+        scrollAreaRef.current.scrollTo({
+          top: scrollAreaRef.current.scrollHeight,
+          behavior: 'smooth',
+        });
+      }
+    }, 100);
   }, [messages]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -75,10 +78,10 @@ export function QuoteModal({ isOpen, onOpenChange }: QuoteModalProps) {
       
       if (result.isComplete) {
          toast({
-          title: 'Briefing Concluído!',
-          description: result.response,
+          title: 'Briefing Concluído! ✅',
+          description: "Recebemos suas informações. Entraremos em contato em breve!",
         });
-        setTimeout(() => handleOpenChange(false), 3000);
+        setTimeout(() => handleOpenChange(false), 4000);
       }
 
     } catch (error) {
@@ -87,7 +90,7 @@ export function QuoteModal({ isOpen, onOpenChange }: QuoteModalProps) {
         ...newMessages,
         {
           role: 'model',
-          content: 'Desculpe, algo deu errado. Poderia tentar novamente?',
+          content: 'Desculpe, algo deu errado por aqui. Poderia tentar novamente? 😕',
         },
       ]);
       toast({
@@ -102,11 +105,11 @@ export function QuoteModal({ isOpen, onOpenChange }: QuoteModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-lg flex flex-col h-[70vh]">
+      <DialogContent className="sm:max-w-lg flex flex-col h-[70vh] max-h-[600px]">
         <DialogHeader>
-          <DialogTitle>Solicitar Orçamento</DialogTitle>
+          <DialogTitle>Vamos começar seu projeto?</DialogTitle>
           <DialogDescription>
-            Vamos conversar um pouco sobre seu projeto.
+            Me responda algumas perguntas para criarmos seu orçamento.
           </DialogDescription>
         </DialogHeader>
         
@@ -121,15 +124,15 @@ export function QuoteModal({ isOpen, onOpenChange }: QuoteModalProps) {
                 )}
                 >
                 {message.role === 'model' && (
-                    <Avatar className="w-8 h-8 border">
-                        <AvatarFallback className="bg-primary text-primary-foreground">
-                            <NjrTechLogo className="w-8 h-8" />
+                    <Avatar className="w-8 h-8 border-2 border-primary/50 bg-background">
+                        <AvatarFallback className="bg-transparent text-primary">
+                            <Bot className="w-5 h-5" />
                         </AvatarFallback>
                     </Avatar>
                 )}
                 <div
                     className={cn(
-                    'max-w-xs rounded-lg p-3 text-sm sm:max-w-sm',
+                    'max-w-xs rounded-lg p-3 text-sm sm:max-w-sm whitespace-pre-wrap',
                     message.role === 'user'
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-muted'
@@ -140,20 +143,20 @@ export function QuoteModal({ isOpen, onOpenChange }: QuoteModalProps) {
                 {message.role === 'user' && (
                      <Avatar className="w-8 h-8">
                         <AvatarFallback>
-                            U
+                            {messages.find(m => m.role === 'user')?.content.charAt(0).toUpperCase() || 'U'}
                         </AvatarFallback>
                     </Avatar>
                 )}
                 </div>
             ))}
              {isSubmitting && (
-                <div className="flex justify-start">
-                     <Avatar className="w-8 h-8 border">
-                         <AvatarFallback className="bg-primary text-primary-foreground">
-                            <NjrTechLogo className="w-8 h-8" />
+                <div className="flex items-start gap-3 justify-start">
+                     <Avatar className="w-8 h-8 border-2 border-primary/50 bg-background">
+                        <AvatarFallback className="bg-transparent text-primary">
+                            <Bot className="w-5 h-5" />
                         </AvatarFallback>
                     </Avatar>
-                    <div className="ml-3 max-w-xs rounded-lg bg-muted p-3 text-sm sm:max-w-sm flex items-center">
+                    <div className="ml-0 max-w-xs rounded-lg bg-muted p-3 text-sm sm:max-w-sm flex items-center">
                         <Loader2 className="h-4 w-4 animate-spin" />
                     </div>
                 </div>
