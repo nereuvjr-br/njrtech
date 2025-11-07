@@ -98,7 +98,7 @@ const chatBriefingFlow = ai.defineFlow(
             // If webhook fails, we can inform the user.
             return {
                 ...output,
-                response: "Thanks for the info! I had a little trouble sending your data to our team, but don't worry, it's saved. We'll be in touch soon!",
+                response: "Obrigado pelas informações! Tive um pequeno problema ao enviar seus dados para nossa equipe, mas não se preocupe, eles estão salvos. Entraremos em contato em breve!",
             }
         }
       } else {
@@ -108,7 +108,7 @@ const chatBriefingFlow = ai.defineFlow(
         return {
             briefing: output.briefing,
             isComplete: false,
-            response: "We're almost there! It looks like some information is missing. Could you please confirm your name, email, and a project description?",
+            response: "Estamos quase lá! Parece que algumas informações estão faltando. Você poderia confirmar seu nome, e-mail e uma descrição do projeto, por favor?",
         }
       }
     }
