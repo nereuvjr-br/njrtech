@@ -44,7 +44,7 @@ const optimizeLandingPageSEOPrompt = ai.definePrompt({
   prompt: `You are an expert SEO specialist. Your task is to optimize the provided landing page content for better search engine ranking.
 
   Here is the landing page content: {{{landingPageContent}}}
-  {% if targetKeywords %}Optimize for the following keywords: {{{targetKeywords}}}{% endif %}
+  {{#if targetKeywords}}Optimize for the following keywords: {{{targetKeywords}}}{{/if}}
 
   Optimize the landing page by:
   - Improving keyword density in a natural way.
