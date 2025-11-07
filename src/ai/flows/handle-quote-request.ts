@@ -53,8 +53,13 @@ const handleQuoteRequestFlow = ai.defineFlow(
     
     const webhookUrl = 'https://n8n.nereujr.com.br/webhook/51b16be5-e345-4623-ba91-33dc2bcc5c20';
 
+    const payload = {
+      ...input,
+      timestamp: new Date().toISOString(),
+    };
+
     console.log('Enviando para o webhook:', webhookUrl);
-    console.log('Payload do Webhook:', JSON.stringify(input, null, 2));
+    console.log('Payload do Webhook:', JSON.stringify(payload, null, 2));
 
     try {
       const response = await fetch(webhookUrl, {
@@ -62,13 +67,12 @@ const handleQuoteRequestFlow = ai.defineFlow(
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(input),
+        body: JSON.stringify(payload),
       });
       
       if (!response.ok) {
-        console.error('Resposta do webhook não foi OK:', { status: response.status, statusText: response.statusText });
         const responseBody = await response.text();
-        console.error('Corpo da resposta do webhook:', responseBody);
+        console.error('Resposta do webhook não foi OK:', { status: response.status, statusText: response.statusText, body: responseBody });
         throw new Error(`Webhook falhou com status ${response.status}`);
       }
 

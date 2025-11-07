@@ -29,6 +29,9 @@ export function ChatWidget() {
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [userInput, setUserInput] = React.useState('');
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [briefingData, setBriefingData] = React.useState<{ name?: string }>({});
+
 
   const resetChat = React.useCallback(() => {
     setMessages([initialMessage]);
@@ -53,6 +56,16 @@ export function ChatWidget() {
     }, 100);
   }, [messages]);
 
+  const focusInput = () => {
+    inputRef.current?.focus();
+  };
+
+  React.useEffect(() => {
+    if (isOpen) {
+      setTimeout(focusInput, 100);
+    }
+  }, [isOpen]);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!userInput.trim()) return;
@@ -67,6 +80,10 @@ export function ChatWidget() {
 
       if (result.response) {
         setMessages([...newMessages, { role: 'model', content: result.response }]);
+      }
+      
+      if (result.briefing?.name) {
+        setBriefingData(prev => ({ ...prev, name: result.briefing?.name }));
       }
       
       if (result.isComplete) {
@@ -97,8 +114,17 @@ export function ChatWidget() {
       });
     } finally {
       setIsSubmitting(false);
+      focusInput();
     }
   }
+
+  const getUserInitial = () => {
+    if (briefingData.name) {
+      return briefingData.name.charAt(0).toUpperCase();
+    }
+    const firstUserMessage = messages.find(m => m.role === 'user' && m.content.length > 0);
+    return firstUserMessage ? firstUserMessage.content.charAt(0).toUpperCase() : 'U';
+  };
 
   return (
     <>
@@ -161,7 +187,7 @@ export function ChatWidget() {
                     {message.role === 'user' && (
                         <Avatar className="w-8 h-8">
                             <AvatarFallback>
-                                {messages.find(m => m.role === 'user' && m.content.length > 0)?.content.charAt(0).toUpperCase() || 'U'}
+                                {getUserInitial()}
                             </AvatarFallback>
                         </Avatar>
                     )}
@@ -184,6 +210,7 @@ export function ChatWidget() {
 
             <form onSubmit={handleSubmit} className="flex items-center gap-2 border-t p-4">
               <Input
+                ref={inputRef}
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 placeholder="Digite sua mensagem..."
