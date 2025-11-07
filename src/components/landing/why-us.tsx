@@ -30,10 +30,11 @@ const benefits = [
 
 export function WhyUs() {
   return (
-    <section id="why-us" className="w-full bg-muted py-16 sm:py-20 lg:py-24">
+    <section id="why-us" className="w-full bg-muted py-16 sm:py-20 lg:py-24 fade-in">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
+            <div className="inline-block rounded-lg bg-background px-3 py-1 text-sm">Nossos Diferenciais</div>
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Por que escolher a NJR Tech?</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               Combinamos o melhor da tecnologia e da expertise humana para entregar resultados excepcionais.
@@ -41,27 +42,14 @@ export function WhyUs() {
           </div>
         </div>
         <div className="mx-auto grid max-w-5xl gap-8 py-12 sm:grid-cols-2 md:grid-cols-3 lg:gap-12">
-          {benefits.slice(0,3).map((benefit, index) => (
+          {benefits.map((benefit, index) => (
              <div key={index} className="flex items-start gap-4">
-              <div className="rounded-full bg-primary/10 p-3 text-primary">
+              <div className="rounded-lg bg-primary/10 p-3 text-primary">
                 {benefit.icon}
               </div>
               <div>
                 <h3 className="text-lg font-bold">{benefit.title}</h3>
-                <p className="text-muted-foreground">{benefit.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-         <div className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-2 md:grid-cols-3 lg:gap-12 lg:px-20">
-          {benefits.slice(3,5).map((benefit, index) => (
-             <div key={index} className="flex items-start gap-4">
-              <div className="rounded-full bg-primary/10 p-3 text-primary">
-                {benefit.icon}
-              </div>
-              <div>
-                <h3 className="text-lg font-bold">{benefit.title}</h3>
-                <p className="text-muted-foreground">{benefit.description}</p>
+                <p className="mt-1 text-muted-foreground">{benefit.description}</p>
               </div>
             </div>
           ))}

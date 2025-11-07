@@ -28,17 +28,18 @@ const testimonials = [
 const StarRating = ({ rating = 5 }) => (
   <div className="flex items-center gap-0.5">
     {Array.from({ length: rating }).map((_, i) => (
-      <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+      <Star key={i} className="h-5 w-5 fill-primary text-primary" />
     ))}
   </div>
 );
 
 export function Testimonials() {
   return (
-    <section id="testimonials" className="w-full bg-muted py-16 sm:py-20 lg:py-24">
+    <section id="testimonials" className="w-full bg-muted py-16 sm:py-20 lg:py-24 fade-in">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
+            <div className="inline-block rounded-lg bg-background px-3 py-1 text-sm">Depoimentos</div>
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">O que nossos clientes dizem</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               Confiança e resultados que falam por si.
@@ -49,12 +50,12 @@ export function Testimonials() {
           {testimonials.map((item, index) => {
             const avatarImage = PlaceHolderImages.find((img) => img.id === item.avatarId);
             return (
-              <Card key={index} className="flex flex-col justify-between">
+              <Card key={index} className="flex flex-col justify-between bg-background rounded-xl shadow-lg">
                 <CardContent className="p-6">
                   <StarRating />
-                  <p className="mt-4 text-foreground">"{item.testimonial}"</p>
+                  <p className="mt-4 text-muted-foreground italic">"{item.testimonial}"</p>
                 </CardContent>
-                <div className="flex items-center gap-4 border-t bg-background/50 p-6">
+                <div className="flex items-center gap-4 border-t p-6">
                   {avatarImage && (
                     <Avatar>
                       <AvatarImage src={avatarImage.imageUrl} alt={item.name} data-ai-hint={avatarImage.imageHint} />

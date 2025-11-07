@@ -42,10 +42,11 @@ const plans = [
 
 export function Pricing() {
   return (
-    <section id="pricing" className="w-full bg-muted py-16 sm:py-20 lg:py-24">
+    <section id="pricing" className="w-full bg-muted py-16 sm:py-20 lg:py-24 fade-in">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
+            <div className="inline-block rounded-lg bg-background px-3 py-1 text-sm">Nossos Planos</div>
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Planos flexíveis para o seu negócio</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               Escolha o plano que melhor se adapta às suas necessidades e comece a converter.
@@ -54,17 +55,17 @@ export function Pricing() {
         </div>
         <div className="mx-auto grid max-w-md items-start gap-8 py-12 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
           {plans.map((plan) => (
-            <Card key={plan.title} className={cn('flex flex-col', plan.isFeatured && 'border-2 border-primary shadow-2xl relative scale-105')}>
+            <Card key={plan.title} className={cn('flex flex-col rounded-xl', plan.isFeatured ? 'border-2 border-primary shadow-2xl relative scale-105' : 'bg-background shadow-lg')}>
               {plan.isFeatured && <div className="absolute -top-3 right-4 rounded-full bg-primary px-3 py-1 text-sm font-medium text-primary-foreground">Popular</div>}
-              <CardHeader className="text-center">
+              <CardHeader className="items-center text-center">
                 <CardTitle className="text-2xl font-bold">{plan.title}</CardTitle>
                 <CardDescription>{plan.price}</CardDescription>
               </CardHeader>
               <CardContent className="flex-1">
-                <ul className="space-y-3">
+                <ul className="space-y-4 text-sm">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2">
-                      <Check className="h-5 w-5 text-primary" />
+                    <li key={feature} className="flex items-center gap-3">
+                      <Check className="h-5 w-5 flex-shrink-0 text-primary" />
                       <span className="text-muted-foreground">{feature}</span>
                     </li>
                   ))}
