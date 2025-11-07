@@ -56,15 +56,18 @@ export function ChatWidget() {
     }, 100);
   }, [messages]);
 
-  const focusInput = () => {
-    inputRef.current?.focus();
-  };
+  const focusInput = React.useCallback(() => {
+    // Add a small delay to ensure the input is enabled and rendered before focusing
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 50);
+  }, []);
 
   React.useEffect(() => {
     if (isOpen) {
-      setTimeout(focusInput, 100);
+      focusInput();
     }
-  }, [isOpen]);
+  }, [isOpen, focusInput]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
