@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
+import { SERPPreview } from '@/components/seo/serp-preview';
+import { Separator } from '@/components/ui/separator';
 
 const exampleContent = `
 <!DOCTYPE html>
@@ -103,7 +105,7 @@ export default function SEOOptimizerPage() {
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted">
+    <div className="flex min-h-screen w-full flex-col bg-muted/50">
       <header className="sticky top-0 z-10 flex h-[60px] items-center gap-4 border-b bg-background px-6">
         <h1 className="text-xl font-semibold">Otimizador de SEO com IA</h1>
       </header>
@@ -125,7 +127,7 @@ export default function SEOOptimizerPage() {
                     value={originalContent}
                     onChange={(e) => setOriginalContent(e.target.value)}
                     placeholder="Cole o código HTML da sua página aqui..."
-                    className="min-h-[200px] font-mono text-xs"
+                    className="min-h-[200px] font-mono text-xs bg-background"
                     rows={15}
                   />
                 </div>
@@ -136,6 +138,7 @@ export default function SEOOptimizerPage() {
                     value={targetKeywords}
                     onChange={(e) => setTargetKeywords(e.target.value)}
                     placeholder="Ex: landing page, conversão, marketing"
+                    className="bg-background"
                   />
                 </div>
                 <div className="flex items-center gap-4">
@@ -160,41 +163,51 @@ export default function SEOOptimizerPage() {
           )}
 
           {optimizedResult && (
-            <div className="grid gap-6 lg:grid-cols-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Conteúdo Original</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <pre className="w-full overflow-auto rounded-md bg-muted p-4 text-xs">
-                    <code>{originalContent}</code>
-                  </pre>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Conteúdo Otimizado pela IA</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <pre className="w-full overflow-auto rounded-md bg-primary/10 p-4 text-xs">
-                    <code>{optimizedResult.optimizedLandingPageContent}</code>
-                  </pre>
-                </CardContent>
-              </Card>
+             <Card>
+              <CardHeader>
+                <CardTitle>Pré-visualização no Google</CardTitle>
+                <CardDescription>Veja como a otimização da IA pode melhorar a aparência da sua página nos resultados de busca.</CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-8 md:grid-cols-2">
+                <SERPPreview title="Antes" htmlContent={originalContent} />
+                <SERPPreview title="Depois (Otimizado com IA)" htmlContent={optimizedResult.optimizedLandingPageContent} />
+              </CardContent>
+              
                {optimizedResult.keywordSuggestions && (
-                <Card className="lg:col-span-2">
-                    <CardHeader>
-                        <CardTitle>Sugestões de Palavras-chave</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-sm text-muted-foreground">{optimizedResult.keywordSuggestions}</p>
-                    </CardContent>
-                </Card>
+                <>
+                  <Separator className="my-4"/>
+                  <CardContent>
+                      <h3 className="text-lg font-semibold mb-2">Sugestões de Palavras-chave</h3>
+                      <p className="text-sm text-muted-foreground">{optimizedResult.keywordSuggestions}</p>
+                  </CardContent>
+                </>
               )}
-            </div>
+
+              <Separator className="my-4"/>
+              
+              <CardHeader className="pt-0">
+                  <CardTitle>Comparação do Código</CardTitle>
+                  <CardDescription>Compare o código HTML original e o otimizado pela IA.</CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-6 lg:grid-cols-2">
+                  <div>
+                      <h3 className="mb-2 font-semibold">Conteúdo Original</h3>
+                      <div className="overflow-auto rounded-md border bg-background p-4 text-xs h-[300px]">
+                          <pre><code>{originalContent}</code></pre>
+                      </div>
+                  </div>
+                  <div>
+                      <h3 className="mb-2 font-semibold">Conteúdo Otimizado</h3>
+                      <div className="overflow-auto rounded-md border bg-primary/10 p-4 text-xs h-[300px]">
+                        <pre><code>{optimizedResult.optimizedLandingPageContent}</code></pre>
+                      </div>
+                  </div>
+              </CardContent>
+            </Card>
           )}
         </div>
       </main>
     </div>
   );
 }
+
