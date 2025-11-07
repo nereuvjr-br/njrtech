@@ -75,6 +75,9 @@ const handleQuoteRequestFlow = ai.defineFlow(
     
     const webhookUrl = 'https://n8n.nereujr.com.br/webhook/51b16be5-e345-4623-ba91-33dc2bcc5c20';
 
+    console.log('Sending to webhook:', webhookUrl);
+    console.log('Webhook payload:', JSON.stringify(input, null, 2));
+
     try {
       const response = await fetch(webhookUrl, {
         method: 'POST',
