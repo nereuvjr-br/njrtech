@@ -13,7 +13,6 @@ const navLinks = [
   { href: '#services', label: 'O que fazemos' },
   { href: '#why-us', label: 'Por que nós?' },
   { href: '#pricing', label: 'Planos' },
-  { href: '#examples', label: 'Exemplos' },
   { href: '#faq', label: 'FAQ' },
 ];
 

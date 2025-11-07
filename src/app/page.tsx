@@ -4,8 +4,6 @@ import { WhatWeDo } from '@/components/landing/what-we-do';
 import { WhyUs } from '@/components/landing/why-us';
 import { HowItWorks } from '@/components/landing/how-it-works';
 import { Pricing } from '@/components/landing/pricing';
-import { Examples } from '@/components/landing/examples';
-import { Testimonials } from '@/components/landing/testimonials';
 import { Faq } from '@/components/landing/faq';
 import { Footer } from '@/components/landing/footer';
 
@@ -19,8 +17,6 @@ export default function Home() {
         <WhyUs />
         <HowItWorks />
         <Pricing />
-        <Examples />
-        <Testimonials />
         <Faq />
       </main>
       <Footer />
