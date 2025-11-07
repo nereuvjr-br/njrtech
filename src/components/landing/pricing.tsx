@@ -1,8 +1,11 @@
-import Link from 'next/link';
+'use client';
+
 import { Check } from 'lucide-react';
+import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { QuoteModal } from '@/components/landing/quote-modal';
 
 const plans = [
   {
@@ -41,7 +44,10 @@ const plans = [
 ];
 
 export function Pricing() {
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = React.useState(false);
+
   return (
+    <>
     <section id="pricing" className="w-full bg-muted py-16 sm:py-20 lg:py-24 fade-in">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
@@ -72,8 +78,8 @@ export function Pricing() {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button asChild className="w-full" variant={plan.isFeatured ? 'default' : 'outline'}>
-                  <Link href="#">Solicitar Orçamento</Link>
+                <Button className="w-full" variant={plan.isFeatured ? 'default' : 'outline'} onClick={() => setIsQuoteModalOpen(true)}>
+                  Solicitar Orçamento
                 </Button>
               </CardFooter>
             </Card>
@@ -81,5 +87,7 @@ export function Pricing() {
         </div>
       </div>
     </section>
+    <QuoteModal isOpen={isQuoteModalOpen} onOpenChange={setIsQuoteModalOpen} />
+    </>
   );
 }
