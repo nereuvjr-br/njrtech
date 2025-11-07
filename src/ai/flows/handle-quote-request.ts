@@ -53,8 +53,8 @@ const handleQuoteRequestFlow = ai.defineFlow(
     
     const webhookUrl = 'https://n8n.nereujr.com.br/webhook/51b16be5-e345-4623-ba91-33dc2bcc5c20';
 
-    console.log('Sending to webhook:', webhookUrl);
-    console.log('Webhook payload:', JSON.stringify(input, null, 2));
+    console.log('Enviando para o webhook:', webhookUrl);
+    console.log('Payload do Webhook:', JSON.stringify(input, null, 2));
 
     try {
       const response = await fetch(webhookUrl, {
@@ -66,23 +66,23 @@ const handleQuoteRequestFlow = ai.defineFlow(
       });
       
       if (!response.ok) {
-        console.error('Webhook response not OK:', { status: response.status, statusText: response.statusText });
+        console.error('Resposta do webhook não foi OK:', { status: response.status, statusText: response.statusText });
         const responseBody = await response.text();
-        console.error('Webhook response body:', responseBody);
-        throw new Error(`Webhook failed with status ${response.status}`);
+        console.error('Corpo da resposta do webhook:', responseBody);
+        throw new Error(`Webhook falhou com status ${response.status}`);
       }
 
-      console.log('Webhook sent successfully for:', input.name);
+      console.log('Webhook enviado com sucesso para:', input.name);
     } catch (error) {
-      console.error('Failed to send webhook:', error);
+      console.error('Falha ao enviar webhook:', error);
       // Re-throw the error to let the calling flow know something went wrong.
       throw error;
     }
     
     // Return a static confirmation after webhook success.
     return {
-      confirmationMessage: `Request for ${input.name} received and sent to webhook.`,
-      followUpSuggestion: 'Follow-up via email.',
+      confirmationMessage: `Recebemos sua solicitação, ${input.name}, e já enviamos para nossa equipe.`,
+      followUpSuggestion: 'Entraremos em contato em breve por e-mail.',
     };
   }
 );
