@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ChatProvider } from '@/hooks/use-chat';
 import { organizationSchema, websiteSchema, servicesSchema } from '@/lib/schema-org';
+import { GoogleAnalytics } from '@/components/analytics/google-analytics';
 
 /**
  * Meta tags otimizadas para SEO
@@ -138,6 +139,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
+        <GoogleAnalytics />
         <ChatProvider>
           {children}
           <Toaster />
