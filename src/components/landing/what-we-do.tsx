@@ -1,26 +1,38 @@
-import { Bot, BrainCircuit, FileCode2, MonitorSmartphone } from 'lucide-react';
+import { Bot, BrainCircuit, FileCode2, MonitorSmartphone, Cpu } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import Link from 'next/link';
 
 const services = [
   {
     icon: <FileCode2 className="h-8 w-8 text-primary" />,
     title: 'Criação de Landing Page',
     description: 'Páginas focadas em conversão, projetadas para transformar visitantes em clientes.',
+    href: '/servicos/landing-page',
   },
   {
     icon: <MonitorSmartphone className="h-8 w-8 text-primary" />,
     title: 'Criação de Site Profissional',
     description: 'Desenvolvemos sites institucionais modernos, responsivos e que refletem a identidade da sua marca.',
+    href: '/servicos/site-profissional',
   },
   {
     icon: <BrainCircuit className="h-8 w-8 text-primary" />,
     title: 'SEO Otimizado com IA',
     description: 'Utilizamos IA para otimizar seu conteúdo e estrutura, garantindo as melhores posições no Google.',
+    href: '/servicos/seo-ia',
+  },
+  {
+    icon: <Cpu className="h-8 w-8 text-primary" />,
+    title: 'Criação de Agente de IA e Automação',
+    description:
+      'Desenvolvemos agentes inteligentes e fluxos de automação que executam tarefas repetitivas, integram sistemas e aumentam eficiência operacional.',
+    href: '/servicos/automacao-ia',
   },
   {
     icon: <Bot className="h-8 w-8 text-primary" />,
     title: 'Formulários e Chats com IA',
     description: 'Implementamos formulários inteligentes e chatbots para capturar leads e oferecer suporte 24/7.',
+    href: '/servicos/chatbot-ia',
   },
 ];
 
@@ -39,13 +51,15 @@ export function WhatWeDo() {
         </div>
         <div className="mx-auto grid max-w-5xl items-stretch gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((service, index) => (
-            <Card key={index} className="flex transform flex-col items-center justify-start p-6 text-center transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl border-transparent hover:border-primary/20 bg-muted/50 rounded-xl">
-              <CardHeader className="p-0 items-center">
-                {service.icon}
-                <CardTitle className="mt-4 text-lg">{service.title}</CardTitle>
-              </CardHeader>
-              <CardDescription className="mt-2 text-sm">{service.description}</CardDescription>
-            </Card>
+            <Link key={index} href={service.href} className="group">
+              <Card className="flex transform flex-col items-center justify-start p-6 text-center transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl border-transparent hover:border-primary/20 bg-muted/50 rounded-xl h-full">
+                <CardHeader className="p-0 items-center">
+                  {service.icon}
+                  <CardTitle className="mt-4 text-lg group-hover:text-primary transition-colors">{service.title}</CardTitle>
+                </CardHeader>
+                <CardDescription className="mt-2 text-sm">{service.description}</CardDescription>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>

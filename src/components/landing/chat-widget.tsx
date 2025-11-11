@@ -19,7 +19,7 @@ type Message = {
 
 const initialMessage: Message = {
   role: 'model',
-  content: 'Olá! Sou o Nexus, assistente da NJR Tech. Para começarmos, qual é o seu nome?',
+  content: 'Olá! 👋 Sou o Nexus, assistente da NJR Tech. Vou te ajudar a criar soluções digitais personalizadas: landing pages, sites profissionais, SEO com IA, automação e chatbots inteligentes. Para começarmos, qual é o seu nome?',
 };
 
 export function ChatWidget() {
@@ -168,7 +168,12 @@ export function ChatWidget() {
         "fixed bottom-4 right-4 z-50 transition-transform duration-300 ease-in-out",
         isOpen ? "translate-y-[200%]" : "translate-y-0"
       )}>
-        <Button size="lg" className="rounded-full shadow-lg h-16 w-16" onClick={() => setOpen(true)}>
+        <Button 
+          data-chat-button 
+          size="lg" 
+          className="rounded-full shadow-lg h-16 w-16" 
+          onClick={() => setOpen(true)}
+        >
           <MessageSquare className="h-8 w-8" />
           <span className="sr-only">Abrir Chat</span>
         </Button>
