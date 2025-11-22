@@ -23,6 +23,7 @@ export default function robots(): MetadataRoute.Robots {
           '/test-*',         // Bloqueia páginas de teste
           '/*.json',         // Bloqueia arquivos JSON
           '/private/',       // Bloqueia conteúdo privado
+          '/docs/',          // Bloqueia documentação interna
         ],
       },
       {

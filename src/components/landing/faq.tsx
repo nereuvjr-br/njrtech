@@ -1,5 +1,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { faqSchema } from '@/lib/schema-org';
+import { SectionHeader, TechCard } from '@/components/ui/industrial-ui';
+import { Terminal } from 'lucide-react';
 
 const faqs = [
   {
@@ -38,32 +40,42 @@ const faqs = [
 
 export function Faq() {
   return (
-    <section id="faq" className="w-full bg-background py-16 sm:py-20 lg:py-24 fade-in">
+    <section id="faq" className="relative w-full bg-black py-24 overflow-hidden border-t border-white/5">
       {/* FAQ Schema for rich snippets in Google */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(faqs)) }}
       />
-      
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-          <div className="space-y-2">
-            <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">Dúvidas?</div>
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Perguntas Frequentes</h2>
-            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Tire suas dúvidas sobre nossos serviços.
-            </p>
-          </div>
-        </div>
-        <div className="mx-auto max-w-3xl py-12">
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`} className="border-b">
-                <AccordionTrigger className="text-left text-lg font-semibold hover:no-underline">{faq.question}</AccordionTrigger>
-                <AccordionContent className="pt-2 text-base text-muted-foreground">{faq.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+
+      <div className="container relative z-10 px-4 md:px-6">
+        <SectionHeader
+          title="BASE DE CONHECIMENTO"
+          subtitle="Respostas para suas dúvidas técnicas e comerciais."
+          className="mb-16"
+        />
+
+        <div className="mx-auto max-w-4xl">
+          <TechCard className="bg-black/50 backdrop-blur-md border-primary/20">
+            <div className="flex items-center gap-2 p-4 border-b border-white/10 bg-white/5">
+              <Terminal className="w-4 h-4 text-primary" />
+              <span className="font-mono text-xs text-muted-foreground">user@njr-tech:~/faq$ cat questions.log</span>
+            </div>
+
+            <div className="p-6">
+              <Accordion type="single" collapsible className="w-full space-y-4">
+                {faqs.map((faq, index) => (
+                  <AccordionItem key={index} value={`item-${index}`} className="border border-white/5 rounded-lg bg-white/5 px-4 data-[state=open]:border-primary/30 data-[state=open]:bg-primary/5 transition-all duration-300">
+                    <AccordionTrigger className="text-left text-base font-mono hover:no-underline hover:text-primary py-4">
+                      <span className="mr-2 text-primary/50">{`>`}</span> {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="pb-4 text-muted-foreground font-sans leading-relaxed border-t border-white/5 pt-4 mt-2">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          </TechCard>
         </div>
       </div>
     </section>

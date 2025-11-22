@@ -23,14 +23,14 @@ import { GoogleAnalytics } from '@/components/analytics/google-analytics';
  */
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://nereujr.com.br'),
-  
+
   // SEO básico otimizado
   title: {
     default: 'NJR Tech - Landing Pages, Sites e Automação com IA | SEO Otimizado',
     template: '%s | NJR Tech',
   },
   description: 'Desenvolvemos landing pages de alta conversão, sites profissionais, SEO com IA, chatbots inteligentes e automação sob medida. Transforme visitantes em clientes com soluções personalizadas.',
-  
+
   // Keywords (ainda relevante para alguns buscadores)
   keywords: [
     'landing page',
@@ -49,12 +49,12 @@ export const metadata: Metadata = {
     'otimização de sites',
     'NJR Tech',
   ],
-  
+
   // Informações do autor/empresa
   authors: [{ name: 'NJR Tech', url: 'https://nereujr.com.br' }],
   creator: 'NJR Tech',
   publisher: 'NJR Tech',
-  
+
   // Controle de indexação e rastreamento
   robots: {
     index: true,
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  
+
   // Open Graph (Facebook, LinkedIn, WhatsApp)
   openGraph: {
     type: 'website',
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
       },
     ],
   },
-  
+
   // Twitter Card
   twitter: {
     card: 'summary_large_image',
@@ -95,19 +95,19 @@ export const metadata: Metadata = {
     images: ['/og-image.jpg'],
     creator: '@njrtech',
   },
-  
+
   // Verificação de ferramentas (adicione seus códigos reais)
   verification: {
     google: 'seu-codigo-google-search-console',
     // yandex: 'seu-codigo-yandex',
     // bing: 'seu-codigo-bing-webmaster',
   },
-  
+
   // Canonical URL (evita duplicação)
   alternates: {
     canonical: '/',
   },
-  
+
   // Informações de categoria
   category: 'technology',
 };
@@ -122,8 +122,8 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-        
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
         {/* Schema.org Structured Data - Ajuda Google a entender o conteúdo */}
         <script
           type="application/ld+json"

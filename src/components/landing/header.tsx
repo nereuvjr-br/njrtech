@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { NjrTechLogo } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { useChat } from '@/hooks/use-chat';
+import { NeonButton } from '@/components/ui/industrial-ui';
 
 const navLinks = [
   { href: '#services', label: 'O que fazemos' },
@@ -35,26 +36,30 @@ export function Header() {
     <header
       className={cn(
         'sticky top-0 z-50 w-full transition-all duration-300',
-        isScrolled ? 'border-b border-border/50 bg-background/80 shadow-sm backdrop-blur-lg' : 'bg-transparent'
+        isScrolled
+          ? 'border-b border-white/10 bg-black/50 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.5)]'
+          : 'bg-transparent border-b border-transparent'
       )}
     >
       <div className="container flex h-20 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <NjrTechLogo />
+        <Link href="/" className="flex items-center gap-2 group">
+          <NjrTechLogo className="group-hover:drop-shadow-[0_0_10px_rgba(0,240,255,0.5)] transition-all" />
         </Link>
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              className="text-sm font-mono font-medium text-muted-foreground transition-colors hover:text-primary hover:shadow-[0_0_10px_rgba(0,240,255,0.3)]"
             >
               {link.label}
             </Link>
           ))}
         </nav>
         <div className="hidden items-center gap-4 md:flex">
-          <Button onClick={openChat}>Solicitar Orçamento</Button>
+          <NeonButton onClick={openChat} className="h-9 text-sm px-6">
+            Solicitar Orçamento
+          </NeonButton>
         </div>
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild className="md:hidden">

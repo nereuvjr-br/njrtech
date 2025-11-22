@@ -1,57 +1,76 @@
-import { BrainCircuit, GaugeCircle, Scaling, TrendingUp, Users } from 'lucide-react';
+import { BrainCircuit, GaugeCircle, Scaling, TrendingUp, Users, ShieldCheck } from 'lucide-react';
+import { TechCard, SectionHeader } from '@/components/ui/industrial-ui';
 
 const benefits = [
   {
-    icon: <GaugeCircle className="h-8 w-8" />,
-    title: 'Performance',
-    description: 'Sites ultra-rápidos que garantem a melhor experiência para o usuário.',
+    icon: <GaugeCircle className="h-6 w-6" />,
+    title: 'PERFORMANCE_MAX',
+    description: 'Sites ultra-rápidos otimizados para Core Web Vitals.',
+    stat: '100/100'
   },
   {
-    icon: <TrendingUp className="h-8 w-8" />,
-    title: 'Conversão',
-    description: 'Design e copywriting focados em transformar visitantes em leads qualificados.',
+    icon: <TrendingUp className="h-6 w-6" />,
+    title: 'CONVERSÃO_ALTA',
+    description: 'Design e copy focados em transformar visitantes em leads.',
+    stat: '+40%'
   },
   {
-    icon: <BrainCircuit className="h-8 w-8" />,
-    title: 'IA na Produção',
-    description: 'Processos otimizados com IA para entregas mais rápidas e eficientes.',
+    icon: <BrainCircuit className="h-6 w-6" />,
+    title: 'IA_NATIVA',
+    description: 'Processos otimizados com IA para entregas mais rápidas.',
+    stat: 'AUTO'
   },
   {
-    icon: <Scaling className="h-8 w-8" />,
-    title: 'Escalabilidade',
-    description: 'Soluções prontas para crescer junto com o seu negócio, sem limitações.',
+    icon: <Scaling className="h-6 w-6" />,
+    title: 'ESCALABILIDADE',
+    description: 'Arquitetura pronta para crescer sem limitações.',
+    stat: 'INF'
   },
   {
-    icon: <Users className="h-8 w-8" />,
-    title: 'Suporte Humano',
-    description: 'Inteligência artificial na produção, mas suporte humanizado e dedicado a você.',
+    icon: <Users className="h-6 w-6" />,
+    title: 'SUPORTE_HUMANO',
+    description: 'Tecnologia de ponta com atendimento dedicado.',
+    stat: '24/7'
+  },
+  {
+    icon: <ShieldCheck className="h-6 w-6" />,
+    title: 'SEGURANÇA_TOTAL',
+    description: 'Proteção avançada contra ataques e backups automáticos.',
+    stat: 'SECURE'
   },
 ];
 
 export function WhyUs() {
   return (
-    <section id="why-us" className="w-full bg-muted py-16 sm:py-20 lg:py-24 fade-in">
-      <div className="container px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-          <div className="space-y-2">
-            <div className="inline-block rounded-lg bg-background px-3 py-1 text-sm">Nossos Diferenciais</div>
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Por que escolher a NJR Tech?</h2>
-            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Combinamos o melhor da tecnologia e da expertise humana para entregar resultados excepcionais.
-            </p>
-          </div>
-        </div>
-        <div className="mx-auto grid max-w-5xl gap-8 py-12 sm:grid-cols-2 md:grid-cols-3 lg:gap-12">
+    <section id="why-us" className="relative w-full bg-black py-24 overflow-hidden border-t border-white/5">
+
+      <div className="container relative z-10 px-4 md:px-6">
+        <SectionHeader
+          title="DIFERENCIAIS DO SISTEMA"
+          subtitle="Por que a NJR Tech é a escolha lógica para seu crescimento."
+          className="mb-16"
+        />
+
+        <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 md:grid-cols-3">
           {benefits.map((benefit, index) => (
-             <div key={index} className="flex items-start gap-4">
-              <div className="rounded-lg bg-primary/10 p-3 text-primary">
+            <TechCard key={index} className="group relative p-6 hover:bg-white/5 transition-all duration-300 border-white/5 hover:border-primary/30">
+              <div className="absolute top-4 right-4 font-mono text-xs text-primary/40 group-hover:text-primary transition-colors">
+                [{benefit.stat}]
+              </div>
+
+              <div className="mb-4 inline-flex items-center justify-center rounded-lg bg-primary/10 p-3 text-primary group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_rgba(0,240,255,0.3)]">
                 {benefit.icon}
               </div>
+
               <div>
-                <h3 className="text-lg font-bold">{benefit.title}</h3>
-                <p className="mt-1 text-muted-foreground">{benefit.description}</p>
+                <h3 className="text-lg font-bold font-headline tracking-tight text-white mb-2 group-hover:text-primary transition-colors">
+                  {benefit.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {benefit.description}
+                </p>
               </div>
-            </div>
+            </TechCard>
           ))}
         </div>
       </div>
