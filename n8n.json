@@ -1,0 +1,96 @@
+{
+  "name": "NJR Tech - Lead Capture",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-capture",
+        "options": {}
+      },
+      "id": "webhook-node-id",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "2b3b08f6-2311-8087-9a0c-dda4edd13832",
+          "mode": "list",
+          "cachedResultName": "Leads do Site",
+          "cachedResultUrl": "https://www.notion.so/2b3b08f6231180879a0cdda4edd13832"
+        },
+        "title": {
+          "title": "={{ $json.body.protocol }} - {{ $json.body.name }}"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Email",
+              "type": "email",
+              "emailValue": "={{ $json.body.email }}"
+            },
+            {
+              "key": "WhatsApp",
+              "type": "phoneNumber",
+              "phoneNumberValue": "={{ $json.body.whatsapp }}"
+            },
+            {
+              "key": "Empresa",
+              "type": "rich_text",
+              "richTextValue": "={{ $json.body.company }}"
+            },
+            {
+              "key": "Protocolo",
+              "type": "rich_text",
+              "richTextValue": "={{ $json.body.protocol }}"
+            },
+            {
+              "key": "Descrição do Projeto",
+              "type": "rich_text",
+              "richTextValue": "={{ $json.body.projectDescription }}"
+            },
+            {
+              "key": "Data de Recebimento",
+              "type": "date",
+              "dateValue": "={{ $now }}"
+            }
+          ]
+        }
+      },
+      "id": "e7bfb84c-fdad-4fa5-9699-2d5feb23ccfb",
+      "name": "Create a database page1",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        0
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "eNNRKZjbo7svXsxf",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Create a database page1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
