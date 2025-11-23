@@ -51,17 +51,17 @@ export function HeroIndustrial() {
                         </div>
 
                         <h1 className="text-5xl md:text-7xl font-bold leading-tight tracking-tighter">
-                            TRANSFORME SEU NEGÓCIO NA <br />
+                            TRANSFORME SEU NEGÓCIO <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-primary animate-pulse">
-                                PARAÍBA
+                                COM IA
                             </span>
                         </h1>
 
                         <div className="p-4 border-l-2 border-primary/50 bg-white/5 backdrop-blur-sm max-w-xl">
                             <p className="font-mono text-muted-foreground text-sm md:text-base leading-relaxed">
                                 <span className="text-primary">{'>'}</span> Sites de Alta Performance e Inteligência Artificial...<br />
-                                <span className="text-primary">{'>'}</span> Atendendo de <span className="text-white">João Pessoa a Cajazeiras</span>...<br />
-                                <span className="text-white">NJR Tech</span>: A referência em tecnologia e automação para empresas que querem liderar no estado.
+                                <span className="text-primary">{'>'}</span> Soluções escaláveis para <span className="text-white">empresas ambiciosas</span>...<br />
+                                <span className="text-white">NJR Tech</span>: A referência em tecnologia e automação para empresas que querem liderar o mercado.
                             </p>
                         </div>
 

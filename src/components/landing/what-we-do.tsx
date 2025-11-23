@@ -6,7 +6,7 @@ const services = [
   {
     icon: <FileCode2 className="h-8 w-8 text-primary" />,
     title: 'SITES QUE VENDEM',
-    description: 'Não basta ser bonito. Criamos sites rápidos e otimizados para transformar visitantes da Paraíba em clientes reais.',
+    description: 'Não basta ser bonito. Criamos sites rápidos e otimizados para transformar visitantes em clientes reais.',
     href: '/servicos/site-profissional',
     code: 'MODULE_WEB_01'
   },

@@ -28,8 +28,8 @@ export function Footer() {
 
             <div className="p-3 border border-white/10 bg-white/5 rounded-lg max-w-xs backdrop-blur-sm">
               <p className="text-xs font-mono text-primary mb-1">LOCALIZAÇÃO_SISTEMA:</p>
-              <p className="text-sm font-bold text-white">Paraíba, Brasil</p>
-              <p className="text-xs text-muted-foreground mt-1">Atendendo João Pessoa, Campina Grande e região.</p>
+              <p className="text-sm font-bold text-white">Brasil</p>
+              <p className="text-xs text-muted-foreground mt-1">Atendendo todo o mundo.</p>
             </div>
           </div>
         </div>
