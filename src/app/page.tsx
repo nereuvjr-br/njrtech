@@ -1,7 +1,7 @@
 import { Header } from '@/components/landing/header';
 // import { HeroPersonalized } from '@/components/landing/hero-personalized';
 import { HeroIndustrial } from '@/components/landing/hero-industrial';
-import { WhatWeDo } from '@/components/landing/what-we-do';
+import { WhatWeDoEnhanced } from '@/components/landing/what-we-do-enhanced';
 import { WhyUs } from '@/components/landing/why-us';
 import { HowItWorks } from '@/components/landing/how-it-works';
 import { Faq } from '@/components/landing/faq';
@@ -18,7 +18,7 @@ export default function Home() {
         {/* Hero Industrial Grade 10 */}
         <HeroIndustrial />
 
-        <WhatWeDo />
+        <WhatWeDoEnhanced />
         <WhyUs />
         <HowItWorks />
 
