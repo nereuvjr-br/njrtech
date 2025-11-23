@@ -6,7 +6,7 @@ import { WhyUs } from '@/components/landing/why-us';
 import { HowItWorks } from '@/components/landing/how-it-works';
 import { Faq } from '@/components/landing/faq';
 import { Footer } from '@/components/landing/footer';
-import { ChatWidget } from '@/components/landing/chat-widget';
+import { LeadFormModal } from '@/components/landing/lead-form-modal';
 import { WhatsappFloat } from '@/components/landing/whatsapp-float';
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
         <Faq />
       </main>
       <Footer />
-      <ChatWidget />
+      <LeadFormModal />
       <WhatsappFloat />
     </div>
   );

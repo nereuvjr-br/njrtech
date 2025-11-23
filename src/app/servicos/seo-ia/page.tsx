@@ -4,7 +4,7 @@ import { HeroPersonalized } from '@/components/landing/hero-personalized';
 import { WhatWeDo } from '@/components/landing/what-we-do';
 import { Faq } from '@/components/landing/faq';
 import { Footer } from '@/components/landing/footer';
-import { ChatWidget } from '@/components/landing/chat-widget';
+import { LeadFormModal } from '@/components/landing/lead-form-modal';
 
 export const metadata: Metadata = {
   title: 'SEO Otimizado com Inteligência Artificial | NJR Tech',
@@ -27,7 +27,7 @@ export default function SEOIAService() {
         <Faq />
       </main>
       <Footer />
-      <ChatWidget />
+      <LeadFormModal />
     </div>
   );
 }

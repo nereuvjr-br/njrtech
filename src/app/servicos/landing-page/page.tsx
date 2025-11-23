@@ -4,7 +4,7 @@ import { HeroPersonalized } from '@/components/landing/hero-personalized';
 import { WhatWeDo } from '@/components/landing/what-we-do';
 import { Faq } from '@/components/landing/faq';
 import { Footer } from '@/components/landing/footer';
-import { ChatWidget } from '@/components/landing/chat-widget';
+import { LeadFormModal } from '@/components/landing/lead-form-modal';
 
 export const metadata: Metadata = {
   title: 'Criação de Landing Page de Alta Conversão | NJR Tech',
@@ -24,15 +24,15 @@ export default function LandingPageService() {
       <main className="flex-1">
         {/* Hero fixo para Landing Page */}
         <HeroPersonalized showBadge={true} forceVariant="landing-page" />
-        
+
         {/* Seção de serviços relacionados */}
         <WhatWeDo />
-        
+
         {/* FAQ */}
         <Faq />
       </main>
       <Footer />
-      <ChatWidget />
+      <LeadFormModal />
     </div>
   );
 }
