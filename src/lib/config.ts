@@ -74,7 +74,7 @@ export const FIREBASE_CONFIG = {
 export const ENVIRONMENT = {
   isDevelopment: process.env.NODE_ENV === 'development',
   isProduction: process.env.NODE_ENV === 'production',
-  isStaging: process.env.NODE_ENV === 'staging',
+  isStaging: (process.env.NODE_ENV as string) === 'staging',
   nodeEnv: process.env.NODE_ENV || 'development',
 } as const;
 

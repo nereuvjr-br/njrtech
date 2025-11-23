@@ -1,15 +1,13 @@
-import { defineFlow, defineTool } from '@genkit-ai/flow';
-import { generate } from '@genkit-ai/ai';
-import { googleAI } from '@genkit-ai/googleai';
-import { z } from 'zod';
+import { ai } from '@/ai/genkit';
+import { z } from 'genkit';
 
 export interface FaqQuestion {
   id: string;
   question: string;
   answer: string;
   keywords: string[];
-  searchVolume: 'baixo' | 'm�dio' | 'alto';
-  difficulty: 'baixo' | 'm�dio' | 'alto';
+  searchVolume: 'baixo' | 'médio' | 'alto';
+  difficulty: 'baixo' | 'médio' | 'alto';
   category: string;
   internalLinks: string[];
 }
@@ -40,8 +38,8 @@ const FaqQuestionSchema = z.object({
   question: z.string(),
   answer: z.string(),
   keywords: z.array(z.string()),
-  searchVolume: z.enum(['baixo', 'm�dio', 'alto']),
-  difficulty: z.enum(['baixo', 'm�dio', 'alto']),
+  searchVolume: z.enum(['baixo', 'médio', 'alto']),
+  difficulty: z.enum(['baixo', 'médio', 'alto']),
   category: z.string(),
   internalLinks: z.array(z.string()),
 });
@@ -68,42 +66,41 @@ const ExpandFaqOutputSchema = z.object({
 });
 
 function generatePrompt(input: ExpandFaqInput): string {
-  const promptTemplate = Voc� � especialista em SEO. Gere {numberOfQuestions} perguntas FAQ com long-tail keywords para: {context}. P�blico: {targetAudience}. Keywords: {keywords}. Retorne JSON: {"questions": [...]}.;
-  
+  const promptTemplate = `Você é especialista em SEO. Gere {numberOfQuestions} perguntas FAQ com long-tail keywords para: {context}. Público: {targetAudience}. Keywords: {keywords}. Retorne JSON: {"questions": [...]}.`;
+
   return promptTemplate
     .replace('{context}', input.context)
     .replace('{numberOfQuestions}', String(input.numberOfQuestions || 15))
     .replace('{targetAudience}', input.targetAudience || 'Geral')
-    .replace('{keywords}', (input.keywords || []).join(', ') || 'N�o especificadas');
+    .replace('{keywords}', (input.keywords || []).join(', ') || 'Não especificadas');
 }
 
-export const expandFaqWithLongtail = defineFlow(
+export const expandFaqWithLongtail = ai.defineFlow(
   {
     name: 'expandFaqWithLongtail',
     inputSchema: ExpandFaqInputSchema,
     outputSchema: ExpandFaqOutputSchema,
   },
   async (input: ExpandFaqInput): Promise<ExpandFaqOutput> => {
-    console.log(' FAQ Expansion iniciado');
+    console.log('FAQ Expansion iniciado');
     try {
       const prompt = generatePrompt(input);
-      const response = await generate({
-        model: googleAI.model(process.env.GENKIT_MODEL || 'googleai/gemini-2.5-flash'),
+      const response = await ai.generate({
         prompt,
       });
 
-      const responseText = typeof response.text === 'function' ? response.text() : String(response.text);
+      const responseText = response.text;
       const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error('JSON n�o encontrado');
+      if (!jsonMatch) throw new Error('JSON não encontrado');
 
       const data = JSON.parse(jsonMatch[0]);
       const questions = data.questions.map((q: any) => ({
-        id: q.id || aq-,
+        id: q.id || `faq-${Math.random().toString(36).substr(2, 9)}`,
         question: q.question,
         answer: q.answer,
         keywords: q.keywords || [],
-        searchVolume: q.searchVolume || 'm�dio',
-        difficulty: q.difficulty || 'm�dio',
+        searchVolume: q.searchVolume || 'médio',
+        difficulty: q.difficulty || 'médio',
         category: q.category || 'Geral',
         internalLinks: q.internalLinks || [],
       }));
@@ -112,12 +109,12 @@ export const expandFaqWithLongtail = defineFlow(
         questions,
         summary: {
           totalGenerated: questions.length,
-          topKeywords: questions.flatMap(q => q.keywords).filter((v, i, a) => a.indexOf(v) === i).slice(0, 10),
+          topKeywords: questions.flatMap((q: FaqQuestion) => q.keywords).filter((v: string, i: number, a: string[]) => a.indexOf(v) === i).slice(0, 10),
           recommendedLinks: {},
         },
         metadata: {
           generatedAt: new Date().toISOString(),
-          model: process.env.GENKIT_MODEL || 'googleai/gemini-2.5-flash',
+          model: 'googleai/gemini-2.5-flash',
         },
       };
     } catch (error) {
